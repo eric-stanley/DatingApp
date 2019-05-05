@@ -15,8 +15,9 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getUsers(page?: number, itemsPerPage?: number,
-           userParams?: { minAge: string; maxAge: string; gender:
-            string; orderBy: string; }): Observable<PaginatedResult<User[]>> {
+           userParams?: { minAge: string; maxAge: string;
+            gender: string; orderBy: string; },
+           likesParam?: string): Observable<PaginatedResult<User[]>> {
     const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<User[]>();
     let params = new HttpParams();
 
@@ -32,6 +33,14 @@ export class UserService {
       params = params.append('orderBy', userParams.orderBy);
     }
 
+    if (likesParam === 'Likers') {
+      params = params.append('likers', 'true');
+    }
+
+    if (likesParam === 'Likees') {
+      params = params.append('likees', 'true');
+    }
+
     return this.http.get<User[]>(this.baseUrl + 'users', {observe: 'response', params})
       .pipe(
         map(response => {
@@ -42,6 +51,17 @@ export class UserService {
           return paginatedResult;
         })
       );
+  }
+
+  checkIfLikedByMe(id: string, recipientId: string) {
+    let params = new HttpParams();
+    params = params.append('id', id);
+    params = params.append('recipientId', recipientId);
+    return this.http.get<boolean>(this.baseUrl + 'users/CheckIfLikedByMe', { params });
+  }
+
+  toggleLikeUser(id: number, recipientId: number) {
+    return this.http.post(this.baseUrl + 'users/' + id +  '/toggleLikeUser/' + recipientId, {});
   }
 
   getUser(id: number): Observable<User> {
@@ -58,6 +78,10 @@ export class UserService {
 
   deletePhoto(userId: number, id: number) {
     return this.http.delete(this.baseUrl + 'users/' + userId + '/photos/' + id);
+  }
+
+  sendLike(id: number, recipientId: number) {
+    return this.http.post(this.baseUrl + 'users/' + id + '/like/' + recipientId, {});
   }
 
 }

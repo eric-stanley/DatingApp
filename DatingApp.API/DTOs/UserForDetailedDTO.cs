@@ -19,6 +19,7 @@ namespace DatingApp.API.DTOs
         public string City { get; set; }
         public string Country { get; set; }
         public string PhotoUrl { get; set; }
+        public bool IsLikedByMe { get; set; } = false;
         public ICollection<PhotosForDetailedDTO> Photos { get; set; }
     }
 }

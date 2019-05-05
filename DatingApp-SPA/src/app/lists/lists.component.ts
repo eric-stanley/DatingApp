@@ -51,4 +51,11 @@ export class ListsComponent implements OnInit {
     this.loadUsers();
   }
 
+  toggleLikeEmitter(user: User) {
+    if (!user.isLikedByMe && this.likesParam === 'Likees') {
+      this.users.splice(this.users.findIndex(u => u.id === user.id), 1);
+    }
+    this.loadUsers();
+  }
+
 }

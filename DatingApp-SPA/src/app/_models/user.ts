@@ -1,6 +1,7 @@
 import { Photo } from './photo';
 
 export interface User {
+  result: User;
   kn: string;
   id: number;
   username: string;

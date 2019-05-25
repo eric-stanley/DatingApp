@@ -21,6 +21,7 @@ using Microsoft.IdentityModel.Tokens;
 using DatingApp.API.Helpers;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using MVC5App.Models;
 
 namespace DatingApp.API
 {
@@ -37,7 +38,7 @@ namespace DatingApp.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(x => {
-                x.UseMySql(Configuration.GetConnectionString("DefaultConnection"))
+                x.UseMySql(Configuration.GetConnectionString("ProdConnection"))
                 .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.IncludeIgnoredWarning));
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)

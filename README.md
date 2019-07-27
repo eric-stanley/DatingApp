@@ -1,0 +1,8 @@
+# DatingApp
+
+This project was created with Angular and .Net-Core with Entity framework. To initialize the dev server, read the instructions in the API folder README and to the application, read the instructions in the SPA folder.
+
+
+## Note
+
+Ensure that the updates that are made to the project are compatible with the dependencies in either folders

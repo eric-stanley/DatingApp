@@ -1,6 +1,6 @@
 # DatingAppAPI
 
-This project was generated with .NET-Core with Entity framework
+This project was generated with .NET-Core and Entity framework
 
 ## Development server
 

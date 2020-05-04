@@ -21,7 +21,6 @@ using Microsoft.IdentityModel.Tokens;
 using DatingApp.API.Helpers;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using MVC5App.Models;
 
 namespace DatingApp.API
 {

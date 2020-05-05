@@ -4,3 +4,6 @@ obj
 .db
 .vs
 appsettings.json
+appsettings.Development.json
+DatingApp.db
+DatingApp.sql

@@ -21,6 +21,7 @@ using Microsoft.IdentityModel.Tokens;
 using DatingApp.API.Helpers;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 namespace DatingApp.API
 {
@@ -38,19 +39,21 @@ namespace DatingApp.API
   {
    services.AddDbContext<DataContext>(x =>
    {
-    // x.UseMySql(Configuration.GetConnectionString("ProdConnection"))
-    x.UseMySql(Environment.GetEnvironmentVariable("PROD_CONNECTION"))
+    x.UseMySql(Configuration.GetConnectionString("ProdConnection"),
+        options => options.EnableRetryOnFailure())
+    // x.UseMySql(Environment.GetEnvironmentVariable("PROD_CONNECTION"))
        .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.IncludeIgnoredWarning));
    });
-   services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-       .AddJsonOptions(opt =>
-       {
-        opt.SerializerSettings.ReferenceLoopHandling =
-                     Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-       });
+   //    services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+   //        .AddJsonOptions(opt =>
+   //        {
+   //         opt.SerializerSettings.ReferenceLoopHandling =
+   //                      Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+   //        });
    services.AddCors();
-   //    services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
-   services.Configure<CloudinarySettings>(Environment.GetEnvironmentVariable("CLOUDINARY_SETTING"));
+   services.AddMvc(options => options.EnableEndpointRouting = false);
+   services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+   //    services.Configure<CloudinarySettings>(Environment.GetEnvironmentVariable("CLOUDINARY_SETTING"));
    services.AddAutoMapper();
    services.AddTransient<Seed>();
    services.AddScoped<IAuthRepository, AuthRepository>();
@@ -62,8 +65,8 @@ namespace DatingApp.API
         {
          ValidateIssuerSigningKey = true,
          IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
-                         //  .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
-                         .GetBytes(Environment.GetEnvironmentVariable("TOKEN").Value)),
+                          .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+         //  .GetBytes(Environment.GetEnvironmentVariable("TOKEN").Value)),
          ValidateIssuer = false,
          ValidateAudience = false
         };
@@ -76,14 +79,25 @@ namespace DatingApp.API
    services.AddDbContext<DataContext>(x =>
    {
     x.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+    // x.UseMySql(Configuration.GetConnectionString("ProdConnection"))
+    //    .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.IncludeIgnoredWarning));
    });
-   services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-       .AddJsonOptions(opt =>
-       {
-        opt.SerializerSettings.ReferenceLoopHandling =
-                     Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-       });
+   //    services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+   //        .AddJsonOptions(opt =>
+   //        {
+   //         opt.SerializerSettings.ReferenceLoopHandling =
+   //                      Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+   //        });
+
+   //    services.AddControllers().AddNewtonsoftJson();
+   //    services.AddControllersWithViews().AddNewtonsoftJson();
+   //    services.AddRazorPages().AddNewtonsoftJson();
+   //    services.AddMvc().AddNewtonsoftJson();
+
    services.AddCors();
+   services.AddMvc(options => options.EnableEndpointRouting = false);
+   services.AddControllers()
+    .AddNewtonsoftJson();
    services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
    services.AddAutoMapper();
    services.AddTransient<Seed>();

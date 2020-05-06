@@ -6,5 +6,8 @@
 		{
 			"path": "../DatingApp .Net Core Identity"
 		}
-	]
+	],
+	"settings": {
+		"editor.insertSpaces": false
+	}
 }

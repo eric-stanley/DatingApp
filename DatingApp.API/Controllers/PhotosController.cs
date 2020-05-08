@@ -11,6 +11,7 @@ using DatingApp.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 
 namespace DatingApp.API.Controllers
 {
@@ -25,11 +26,13 @@ namespace DatingApp.API.Controllers
 		private Cloudinary _cloudinary;
 
 		public PhotosController(IDatingRepository repo, IMapper mapper,
-						IOptions<CloudinarySettings> cloudinaryConfig)
+						IOptions<CloudinarySettings> cloudinaryConfig, IConfiguration configuration)
 		{
 			_cloudinaryConfig = cloudinaryConfig;
 			_mapper = mapper;
 			_repo = repo;
+
+			Configuration = configuration;
 
 			Account acc = new Account(
 							_cloudinaryConfig.Value.CloudName,
@@ -39,6 +42,8 @@ namespace DatingApp.API.Controllers
 
 			_cloudinary = new Cloudinary(acc);
 		}
+
+		public IConfiguration Configuration { get; }
 
 		[HttpGet("{id}", Name = "GetPhoto")]
 		public async Task<IActionResult> GetPhoto(int id)
@@ -72,7 +77,7 @@ namespace DatingApp.API.Controllers
 						File = new FileDescription(file.Name, stream),
 						Transformation = new Transformation()
 													.Width(500).Height(500).Crop("fill").Gravity("face"),
-						Folder = "DatingAppV1-01"
+						Folder = Configuration.GetValue<string>("CloudinaryUploadFolder")
 					};
 					uploadResult = _cloudinary.Upload(uploadParams);
 				}

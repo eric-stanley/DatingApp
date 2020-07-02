@@ -9,4 +9,6 @@ Ensure that the updates that are made to the project are compatible with the dep
 ## Demo
 
 https://datingapp-v1.netlify.app/ <br />
-https://datingapp-v1.onrender.com/
+https://datingapp-v1.onrender.com/ <br />
+https://datingapp-v1.vercel.app/
+
